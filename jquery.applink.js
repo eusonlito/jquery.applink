@@ -28,19 +28,19 @@
 
 				event.preventDefault();
 
-				if (enabled) {
-					window.location = applink;
-
-					var time = +new Date;
-
-					setTimeout(function() {
-						if ((+new Date - time) < 400) {
-							Plugin.prototype._link(href);
-						}
-					}, 300);
-				} else {
-					Plugin.prototype._link(href);
+				if (!enabled) {
+					return Plugin.prototype._link(href);
 				}
+
+				window.location = applink;
+
+				var time = +new Date;
+
+				setTimeout(function() {
+					if ((+new Date - time) < 400) {
+						Plugin.prototype._link(href);
+					}
+				}, 300);
 			});
 		},
 
