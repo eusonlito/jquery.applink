@@ -35,11 +35,11 @@
 
 					setTimeout(function() {
 						if ((+new Date - time) < 400) {
-							Plugin.prototype.link(href);
+							Plugin.prototype._link(href);
 						}
 					}, 300);
 				} else {
-					Plugin.prototype.link(href);
+					Plugin.prototype._link(href);
 				}
 			});
 		},
@@ -48,15 +48,15 @@
 			$(this.element).off('.' + pluginName);
 		},
 
-		link: function (href) {
+		_link: function (href) {
 			if (settings.popup && /https?:\/\/(www\.)?(facebook\.com|twitter\.com)/i.test(href)) {
-				this.popUp(href);
+				Plugin.prototype._popUp(href);
 			} else {
 				window.location = href;
 			}
 		},
 
-		popUp: function (href) {
+		_popUp: function (href) {
 			var width = (screen.width > 620) ? 600 : screen.width,
 				height = (screen.height > 300) ? 280 : screen.height,
 				left = (screen.width / 2) - (width / 2),
