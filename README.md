@@ -21,4 +21,12 @@ To enable the plugin:
 
     $('a[data-applink]').applink();
 
+Full options:
+
+    $('a[data-applink]').applink({
+        popup: true, // disable/enable share popup created by plugin
+        desktop: false, // disable/enable desktop native app check
+        data: pluginName // load native links from data-XXXXXX
+    });
+
 Enjoy!
