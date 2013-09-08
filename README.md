@@ -21,7 +21,7 @@ To enable the plugin:
 
     $('a[data-applink]').applink();
 
-Full options:
+Full and default options:
 
     $('a[data-applink]').applink({
         popup: true, // disable/enable share popup created by plugin
