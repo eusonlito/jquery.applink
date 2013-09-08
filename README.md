@@ -25,7 +25,7 @@ Full options:
 
     $('a[data-applink]').applink({
         popup: true, // disable/enable share popup created by plugin
-        desktop: false, // disable/enable desktop native app check
+        desktop: false, // disable/enable native app check for no mobile devices
         data: pluginName // load native links from data-XXXXXX
     });
 
