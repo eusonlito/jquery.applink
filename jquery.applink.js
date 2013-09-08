@@ -4,6 +4,7 @@
         settings,
         defaults = {
             popup: true,
+            desktop: false,
             data: pluginName
         };
  
@@ -22,7 +23,7 @@
             $element.on('click.' + pluginName, function (event) {
                 var href = $element.attr('href'),
                     applink = $element.data(settings.data),
-                    enabled = mobile ? applink : false;
+                    enabled = (mobile || desktop) ? applink : false;
 
                 enabled = (enabled && (typeof enabled !== 'undefined')) ? true : false;
 
