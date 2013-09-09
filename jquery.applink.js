@@ -1,7 +1,6 @@
 ;(function ($, window, document, undefined) {
     var pluginName = 'applink',
         mobile = /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i.test(navigator.userAgent),
-        settings,
         defaults = {
             popup: true,
             desktop: false,
@@ -11,26 +10,26 @@
     var Plugin = function (element, options) {
         this.element = element;
 
-        settings = $.extend({}, defaults, options);
+        this.settings = $.extend({}, defaults, options);
 
         this.init();
     }
  
     Plugin.prototype = {
         init: function () {
-            var $element = $(this.element);
+            var $element = $(this.element), that = this;
 
             $element.on('click.' + pluginName, function (event) {
                 var href = $element.attr('href'),
-                    applink = $element.data(settings.data),
-                    enabled = (mobile || desktop) ? applink : false;
+                    applink = $element.data(that.settings.data),
+                    enabled = (mobile || that.settings.desktop) ? applink : false;
 
                 enabled = (enabled && (typeof enabled !== 'undefined')) ? true : false;
 
                 event.preventDefault();
 
                 if (!enabled) {
-                    return Plugin.prototype._link(href);
+                    return that._link(href);
                 }
 
                 window.location = applink;
@@ -39,7 +38,7 @@
 
                 setTimeout(function() {
                     if ((+new Date - time) < 400) {
-                        Plugin.prototype._link(href);
+                        that._link(href);
                     }
                 }, 300);
             });
@@ -50,8 +49,8 @@
         },
 
         _link: function (href) {
-            if (settings.popup && /^https?:\/\/(www\.)?(facebook|twitter)\.com/i.test(href)) {
-                Plugin.prototype._popUp(href);
+            if (this.settings.popup && /^https?:\/\/(www\.)?(facebook|twitter)\.com/i.test(href)) {
+                this._popUp(href);
             } else {
                 window.location = href;
             }
