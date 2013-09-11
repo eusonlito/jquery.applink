@@ -3,7 +3,7 @@
 	"title": "jquery.applink",
 	"description": "Launch native apps from web page links for mobile and desktop devices",
 	"keywords": ["native", "mobile", "app", "link"],
-	"version": "1.0.2",
+	"version": "1.0.3",
 	"author": {
 		"name": "Lito",
 		"url": "http://about.me/lito"
