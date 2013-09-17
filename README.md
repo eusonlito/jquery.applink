@@ -26,7 +26,16 @@ All options and default values:
     $('a[data-applink]').applink({
         popup: true, // disable/enable share popup created by plugin
         desktop: false, // disable/enable native app check for no mobile devices
-        data: pluginName // load native links from data-XXXXXX
+        data: pluginName // load native links from data-XXXXXX attribute
+    });
+
+Also, if you are using this plugin to set native links to a large list, you can use the delegate function to get the best performance:
+
+    $('.links-list').applink({
+        popup: true, // disable/enable share popup created by plugin
+        desktop: false, // disable/enable native app check for no mobile devices
+        delegate: 'a[data-applink]', // Delegate action into the parent element (default is null)
+        data: pluginName // load native links from data-XXXXXX attribute
     });
 
 Enjoy!
