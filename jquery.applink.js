@@ -4,9 +4,51 @@
         defaults = {
             popup: true,
             desktop: false,
+            delegate: null,
             data: pluginName
         };
  
+    var Callback = function ($element, settings) {
+        var href = $element.attr('href'),
+            applink = $element.data(settings.data),
+            enabled = (mobile || settings.desktop) ? applink : false;
+
+        enabled = (enabled && (typeof enabled !== 'undefined')) ? true : false;
+
+        if (!enabled) {
+            return Link(href, settings);
+        }
+
+        window.location = applink;
+
+        var time = +new Date;
+
+        setTimeout(function() {
+            if ((+new Date - time) < 400) {
+                Link(href, settings);
+            }
+        }, 300);
+    }
+
+    var Link = function (href, settings) {
+        if (settings.popup && /^https?:\/\/(www\.)?(facebook|twitter)\.com/i.test(href)) {
+            PopUp(href);
+        } else {
+            window.location = href;
+        }
+    }
+
+    var PopUp = function (href) {
+        var width = (screen.width > 620) ? 600 : screen.width,
+            height = (screen.height > 300) ? 280 : screen.height,
+            left = (screen.width / 2) - (width / 2),
+            top = (screen.height / 2) - (height / 2),
+            options = 'location=no,menubar=no,status=no,toolbar=no,scrollbars=no,directories=no,copyhistory=no'
+                + ',width=' + width + ',height=' + height + ',top=' + top + ',left=' + left;
+
+        window.open(href, pluginName, options).focus();
+    }
+
     var Plugin = function (element, options) {
         this.element = element;
 
@@ -14,57 +56,19 @@
 
         this.init();
     }
- 
+
     Plugin.prototype = {
         init: function () {
             var $element = $(this.element), that = this;
 
-            $element.on('click.' + pluginName, function (event) {
-                var href = $element.attr('href'),
-                    applink = $element.data(that.settings.data),
-                    enabled = (mobile || that.settings.desktop) ? applink : false;
-
-                enabled = (enabled && (typeof enabled !== 'undefined')) ? true : false;
-
+            $element.on('click.' + pluginName, this.settings.delegate, function (event) {
                 event.preventDefault();
-
-                if (!enabled) {
-                    return that._link(href);
-                }
-
-                window.location = applink;
-
-                var time = +new Date;
-
-                setTimeout(function() {
-                    if ((+new Date - time) < 400) {
-                        that._link(href);
-                    }
-                }, 300);
+                Callback($(this), that.settings);
             });
         },
 
         destroy: function () {
             $(this.element).off('.' + pluginName);
-        },
-
-        _link: function (href) {
-            if (this.settings.popup && /^https?:\/\/(www\.)?(facebook|twitter)\.com/i.test(href)) {
-                this._popUp(href);
-            } else {
-                window.location = href;
-            }
-        },
-
-        _popUp: function (href) {
-            var width = (screen.width > 620) ? 600 : screen.width,
-                height = (screen.height > 300) ? 280 : screen.height,
-                left = (screen.width / 2) - (width / 2),
-                top = (screen.height / 2) - (height / 2),
-                options = 'location=no,menubar=no,status=no,toolbar=no,scrollbars=no,directories=no,copyhistory=no'
-                    + ',width=' + width + ',height=' + height + ',top=' + top + ',left=' + left;
-
-            window.open(href, pluginName, options).focus();
         }
     };
  
