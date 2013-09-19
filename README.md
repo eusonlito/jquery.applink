@@ -15,7 +15,7 @@ Also, you can use it to share your page, like:
 
 This action will try to open the Twitter mobile app, and if is not available, it will open the default share modal at browser.
 
-You have a extended schemes list available at http://wiki.akosma.com/IPhone_URL_Schemes
+You have a extended schemes list available at http://wiki.akosma.com/IPhone_URL_Schemes and http://handleopenurl.com/scheme
 
 To enable the plugin:
 
