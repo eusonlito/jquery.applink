@@ -19,23 +19,35 @@ You have a extended schemes list available at http://wiki.akosma.com/IPhone_URL_
 
 To enable the plugin:
 
-    $('a[data-applink]').applink();
+```javascript
+$(document).ready(function () {
+	$('a[data-applink]').applink();
+});
+```
 
 All options and default values:
 
-    $('a[data-applink]').applink({
-        popup: true, // disable/enable share popup created by plugin
-        desktop: false, // disable/enable native app check for no mobile devices
-        data: 'applink' // load native links from data-XXXXXX attribute
-    });
+```javascript
+$(document).ready(function () {
+	$('a[data-applink]').applink({
+		popup: true, // disable/enable share popup created by plugin
+		desktop: false, // disable/enable native app check for no mobile devices
+		data: 'applink' // load native links from data-XXXXXX attribute
+	});
+});
+```
 
 Also, if you are using this plugin to set native links to a large list, you can use the delegate function to get the best performance:
 
-    $('.links-list').applink({
-        popup: true, // disable/enable share popup created by plugin
-        desktop: false, // disable/enable native app check for no mobile devices
-        delegate: 'a[data-applink]', // Delegate action into the parent element (default is null)
-        data: 'applink' // load native links from data-XXXXXX attribute
-    });
+```javascript
+$(document).ready(function () {
+	$('.links-list').applink({
+		popup: true, // disable/enable share popup created by plugin
+		desktop: false, // disable/enable native app check for no mobile devices
+		delegate: 'a[data-applink]', // Delegate action into the parent element (default is null)
+		data: 'applink' // load native links from data-XXXXXX attribute
+	});
+});
+```
 
 Enjoy!
