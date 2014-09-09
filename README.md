@@ -34,7 +34,7 @@ All options and default values:
 ```javascript
 $(document).ready(function () {
 	$('a[data-applink]').applink({
-		popup: true, // disable/enable share popup created by plugin
+		popup: 'auto', // disable/enable share popup created by plugin. If auto, olny will be enabled to facebook and twitter domains
 		desktop: false, // disable/enable native app check for no mobile devices
 		data: 'applink' // load native links from data-XXXXXX attribute
 	});
@@ -46,7 +46,7 @@ Also, if you are using this plugin to set native links to a large list, you can 
 ```javascript
 $(document).ready(function () {
 	$('.links-list').applink({
-		popup: true, // disable/enable share popup created by plugin
+		popup: 'auto', // disable/enable share popup created by plugin. If auto, olny will be enabled to facebook and twitter domains
 		desktop: false, // disable/enable native app check for no mobile devices
 		delegate: 'a[data-applink]', // Delegate action into the parent element (default is null)
 		data: 'applink' // load native links from data-XXXXXX attribute

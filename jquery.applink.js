@@ -1,41 +1,70 @@
 ;(function ($, window, document, undefined) {
     var pluginName = 'applink',
-        mobile = /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i.test(navigator.userAgent),
         defaults = {
-            popup: true,
+            popup: 'auto',
             desktop: false,
             delegate: null,
             data: pluginName
-        };
+        },
+
+        agent = navigator.userAgent;
+
+        IS_IPAD = agent.match(/iPad/i) != null,
+        IS_IPHONE = !IS_IPAD && ((agent.match(/iPhone/i) != null) || (agent.match(/iPod/i) != null)),
+        IS_IOS = IS_IPAD || IS_IPHONE,
+        IS_ANDROID = !IS_IOS && agent.match(/android/i) != null,
+        IS_MOBILE = IS_IOS || IS_ANDROID;
  
     var Callback = function ($element, settings) {
         var href = $element.attr('href'),
-            applink = $element.data(settings.data),
-            enabled = (mobile || settings.desktop) ? applink : false;
+            applink = $element.data(settings.data);
 
-        enabled = (enabled && (typeof enabled !== 'undefined')) ? true : false;
+        var enabled = (IS_MOBILE || settings.desktop) ? applink : false;
+        enabled = ((typeof enabled !== 'undefined') && enabled) ? true : false;
+
+        var popup = $element.data('popup');
+
+        if ((typeof popup === 'undefined') || !popup) {
+            popup = settings.popup;
+        } else {
+            popup = (popup.toString() === 'false') ? false : popup;
+        }
 
         if (!enabled) {
-            return Link(href, settings);
+            return Link(href, popup);
         }
 
         window.location = applink;
 
-        var time = +new Date;
-
         setTimeout(function() {
-            if ((+new Date - time) < 400) {
-                Link(href, settings);
+            if (!BrowserHidden) {
+                Link(href, popup);
             }
-        }, 300);
+        }, 100);
     }
 
-    var Link = function (href, settings) {
-        if (settings.popup && /^https?:\/\/(www\.)?(facebook|twitter)\.com/i.test(href)) {
-            PopUp(href);
-        } else {
-            window.location = href;
+    var BrowserHidden = function () {
+        if (typeof document.hidden !== 'undefined') {
+          return document.hidden;
+        } else if (typeof document.mozHidden !== 'undefined') {
+          return document.mozHidden;
+        } else if (typeof document.msHidden !== 'undefined') {
+          return document.msHidden;
+        } else if (typeof document.webkitHidden !== 'undefined') {
+          return document.webkitHidden;
         }
+
+        return false;
+    }
+
+    var Link = function (href, popup) {
+        if ((popup === 'auto') && /^https?:\/\/(www\.)?(facebook|twitter)\.com/i.test(href)) {
+            return PopUp(href);
+        } else if ((popup !== 'auto') && popup) {
+            return PopUp(href);
+        }
+
+        window.location = href;
     }
 
     var PopUp = function (href) {
@@ -46,7 +75,7 @@
             options = 'location=no,menubar=no,status=no,toolbar=no,scrollbars=no,directories=no,copyhistory=no'
                 + ',width=' + width + ',height=' + height + ',top=' + top + ',left=' + left;
 
-        window.open(href, pluginName, options).focus();
+        return window.open(href, pluginName, options).focus();
     }
 
     var Plugin = function (element, options) {
