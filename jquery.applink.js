@@ -7,7 +7,7 @@
             data: pluginName
         },
 
-        agent = navigator.userAgent;
+        agent = navigator.userAgent,
 
         IS_IPAD = agent.match(/iPad/i) != null,
         IS_IPHONE = !IS_IPAD && ((agent.match(/iPhone/i) != null) || (agent.match(/iPod/i) != null)),
