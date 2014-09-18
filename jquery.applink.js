@@ -68,6 +68,10 @@
             return PopUp(href);
         }
 
+        if (popupOpened && !popupOpened.closed) {
+            popupOpened.close();
+        }
+
         window.location = href;
     }
 
