@@ -7,12 +7,14 @@
             data: pluginName
         },
 
+        popupOpened = false,
+
         agent = navigator.userAgent,
 
-        IS_IPAD = agent.match(/iPad/i) != null,
-        IS_IPHONE = !IS_IPAD && ((agent.match(/iPhone/i) != null) || (agent.match(/iPod/i) != null)),
+        IS_IPAD = agent.match(/iPad/i) !== null,
+        IS_IPHONE = !IS_IPAD && ((agent.match(/iPhone/i) !== null) || (agent.match(/iPod/i) !== null)),
         IS_IOS = IS_IPAD || IS_IPHONE,
-        IS_ANDROID = !IS_IOS && agent.match(/android/i) != null,
+        IS_ANDROID = !IS_IOS && agent.match(/android/i) !== null,
         IS_MOBILE = IS_IOS || IS_ANDROID;
  
     var Callback = function ($element, settings) {
@@ -34,13 +36,15 @@
             return Link(href, popup);
         }
 
-        window.location = applink;
+        PopUp(applink);
 
         setTimeout(function() {
-            if (!BrowserHidden) {
+            if (BrowserHidden()) {
+                popupOpened.close();
+            } else {
                 Link(href, popup);
             }
-        }, 100);
+        }, 300);
     }
 
     var BrowserHidden = function () {
@@ -68,6 +72,11 @@
     }
 
     var PopUp = function (href) {
+        if (popupOpened && !popupOpened.closed) {
+            popupOpened.location.replace(href);
+            return popupOpened;
+        }
+
         var width = (screen.width > 620) ? 600 : screen.width,
             height = (screen.height > 300) ? 280 : screen.height,
             left = (screen.width / 2) - (width / 2),
@@ -75,7 +84,10 @@
             options = 'location=no,menubar=no,status=no,toolbar=no,scrollbars=no,directories=no,copyhistory=no'
                 + ',width=' + width + ',height=' + height + ',top=' + top + ',left=' + left;
 
-        return window.open(href, pluginName, options).focus();
+        popupOpened = window.open(href, pluginName, options);
+        popupOpened.focus();
+
+        return popupOpened;
     }
 
     var Plugin = function (element, options) {
