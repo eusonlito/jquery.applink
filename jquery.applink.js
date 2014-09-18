@@ -78,6 +78,8 @@
     var PopUp = function (href) {
         if (popupOpened && !popupOpened.closed) {
             popupOpened.location.replace(href);
+            popupOpened.focus();
+
             return popupOpened;
         }
 
