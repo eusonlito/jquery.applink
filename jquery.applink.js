@@ -16,7 +16,7 @@
         IS_IOS = IS_IPAD || IS_IPHONE,
         IS_ANDROID = !IS_IOS && agent.match(/android/i) !== null,
         IS_MOBILE = IS_IOS || IS_ANDROID;
- 
+
     var Callback = function ($element, settings) {
         var href = $element.attr('href'),
             applink = $element.data(settings.data);
@@ -118,7 +118,7 @@
             $(this.element).off('.' + pluginName);
         }
     };
- 
+
     $.fn[pluginName] = function (options) {
         if ((options === undefined) || (typeof options === 'object')) {
             return this.each(function () {
@@ -127,7 +127,7 @@
                 }
             });
         }
- 
+
         if ((typeof options !== 'string') || (options[0] === '_') || (options === 'init')) {
             return true;
         }
