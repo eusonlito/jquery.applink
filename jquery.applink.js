@@ -4,6 +4,7 @@
             popup: 'auto',
             desktop: false,
             delegate: null,
+            timeout: 1500,
             data: pluginName
         },
 
@@ -17,34 +18,48 @@
         IS_ANDROID = !IS_IOS && agent.match(/android/i) !== null,
         IS_MOBILE = IS_IOS || IS_ANDROID;
 
-    var Callback = function ($element, settings) {
-        var href = $element.attr('href'),
-            applink = $element.data(settings.data);
+    var setSettings = function ($element, s) {
+        s.href = $element.attr('href');
+        s.applink = $element.data(s.data);
+        s.popup = $element.data('popup');
+        s.desktop = $element.data('desktop');
 
-        var enabled = (IS_MOBILE || settings.desktop) ? applink : false;
-        enabled = ((typeof enabled !== 'undefined') && enabled) ? true : false;
-
-        var popup = $element.data('popup');
-
-        if ((typeof popup === 'undefined') || !popup) {
-            popup = settings.popup;
+        if ((typeof s.desktop === 'undefined') || !s.desktop) {
+            s.desktop = defaults.desktop;
         } else {
-            popup = (popup.toString() === 'false') ? false : popup;
+            s.desktop = (s.desktop.toString() === 'true');
         }
 
-        if (!enabled) {
-            return Link(href, popup);
+        s.enabled = (IS_MOBILE || s.desktop) ? s.applink : false;
+        s.enabled = ((typeof s.enabled !== 'undefined') && s.enabled) ? true : false;
+
+        if ((typeof s.popup === 'undefined') || !s.popup) {
+            s.popup = defaults.popup;
+        } else {
+            s.popup = (s.popup.toString() === 'false') ? false : s.popup;
         }
 
-        PopUp(applink);
+        if ((s.popup === 'auto') && /^https?:\/\/(www\.)?(facebook|twitter)\.com/i.test(s.href)) {
+            s.popup = true;
+        } else if ((s.popup !== 'auto') && s.popup) {
+            s.popup = true;
+        } else {
+            s.popup = false;
+        }
 
-        setTimeout(function() {
-            if (BrowserHidden()) {
+        return s;
+    }
+
+    var Callback = function (s) {
+        setTimeout(function () {
+            if (!BrowserHidden()) {
+                Link(s);
+            } else if (popupOpened) {
                 popupOpened.close();
-            } else {
-                Link(href, popup);
             }
-        }, 300);
+        }, s.timeout);
+
+        window.location = s.applink;
     }
 
     var BrowserHidden = function () {
@@ -61,23 +76,21 @@
         return false;
     }
 
-    var Link = function (href, popup) {
-        if ((popup === 'auto') && /^https?:\/\/(www\.)?(facebook|twitter)\.com/i.test(href)) {
-            return PopUp(href);
-        } else if ((popup !== 'auto') && popup) {
-            return PopUp(href);
+    var Link = function (s) {
+        if (s.popup) {
+            return PopUp(s);
         }
 
         if (popupOpened && !popupOpened.closed) {
             popupOpened.close();
         }
 
-        window.location = href;
+        window.location = s.href;
     }
 
-    var PopUp = function (href) {
+    var PopUp = function (s) {
         if (popupOpened && !popupOpened.closed) {
-            popupOpened.location.replace(href);
+            popupOpened.location.replace(s.href);
             popupOpened.focus();
 
             return popupOpened;
@@ -90,7 +103,7 @@
             options = 'location=no,menubar=no,status=no,toolbar=no,scrollbars=no,directories=no,copyhistory=no'
                 + ',width=' + width + ',height=' + height + ',top=' + top + ',left=' + left;
 
-        popupOpened = window.open(href, pluginName, options);
+        popupOpened = window.open(s.href, pluginName, options);
         popupOpened.focus();
 
         return popupOpened;
@@ -108,9 +121,16 @@
         init: function () {
             var $element = $(this.element), that = this;
 
-            $element.on('click.' + pluginName, this.settings.delegate, function (event) {
-                event.preventDefault();
-                Callback($(this), that.settings);
+            $element.on('click.' + pluginName, this.settings.delegate, function (e) {
+                e.preventDefault();
+
+                var s = setSettings($(this), that.settings);
+
+                if (!s.enabled) {
+                    return Link(s);
+                }
+
+                Callback(s);
             });
         },
 
