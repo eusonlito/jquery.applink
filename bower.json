@@ -1,0 +1,19 @@
+{
+	"name": "jquery.applink",
+	"description": "Launch native apps from web page links for mobile and desktop devices",
+	"keywords": ["native", "mobile", "app", "link"],
+	"authors": ["Lito (https://github.com/eusonlito)"],
+	"license": "Apache License 2.0",
+	"homepage": "https://github.com/eusonlito/jquery.applink",
+
+	"repository": {
+		"type": "git",
+		"url": "git://github.com/eusonlito/jquery.applink.git"
+	},
+
+	"main": ["jquery.applink.js"],
+
+	"dependencies": {
+		"jquery": ">=1.7"
+	}
+}
