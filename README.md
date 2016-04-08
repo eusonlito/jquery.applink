@@ -21,6 +21,8 @@ This action will try to open the Twitter mobile app, and if is not available, it
 
 You have a extended schemes list available at http://wiki.akosma.com/IPhone_URL_Schemes and http://handleopenurl.com/scheme
 
+Plugin detects the `target="_blank"` tag attribute, but take care because the window will be open with javascript function `window.open` and can be blocked by browser.
+
 To enable the plugin:
 
 ```javascript
