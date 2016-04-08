@@ -24,6 +24,7 @@
         s.applink = $element.data(s.data);
         s.popup = $element.data('popup');
         s.desktop = $element.data('desktop');
+        s.target = $element.attr('target');
 
         if ((typeof s.desktop === 'undefined') || !s.desktop) {
             s.desktop = defaults.desktop;
@@ -92,7 +93,11 @@
             popupOpened.close();
         }
 
-        window.location = s.href;
+        if (s.target === '_blank') {
+            window.open(s.href, '_blank');
+        } else {
+            window.location = s.href;
+        }
     }
 
     var PopUp = function (s) {
