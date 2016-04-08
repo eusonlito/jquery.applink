@@ -2,6 +2,7 @@
     var pluginName = 'applink',
         defaults = {
             popup: 'auto',
+            popupDomains: 'facebook|twitter',
             desktop: false,
             delegate: null,
             timeout: 1500,
@@ -33,13 +34,19 @@
         s.enabled = (IS_MOBILE || s.desktop) ? s.applink : false;
         s.enabled = ((typeof s.enabled !== 'undefined') && s.enabled) ? true : false;
 
+        if (typeof s.popupDomains === 'undefined') {
+            s.popupDomains = defaults.popupDomains;
+        }
+
         if ((typeof s.popup === 'undefined') || !s.popup) {
             s.popup = defaults.popup;
         } else {
             s.popup = (s.popup.toString() === 'false') ? false : s.popup;
         }
 
-        if ((s.popup === 'auto') && /^https?:\/\/(www\.)?(facebook|twitter)\.com/i.test(s.href)) {
+        checkPopup = new RegExp('\/\/([a-z]+\.)?(' + s.popupDomains + ')\.', 'i');
+
+        if ((s.popup === 'auto') && checkPopup.test(s.href)) {
             s.popup = true;
         } else if ((s.popup !== 'auto') && s.popup) {
             s.popup = true;
@@ -97,7 +104,7 @@
         }
 
         var width = (screen.width > 620) ? 600 : screen.width,
-            height = (screen.height > 300) ? 280 : screen.height,
+            height = (screen.height > 320) ? 300 : screen.height,
             left = (screen.width / 2) - (width / 2),
             top = (screen.height / 2) - (height / 2),
             options = 'location=no,menubar=no,status=no,toolbar=no,scrollbars=no,directories=no,copyhistory=no'
